@@ -17,5 +17,8 @@ RUN dotnet publish "absolwent.csproj" -c Release -o /app/publish /p:UseAppHost=f
 
 FROM base AS final
 WORKDIR /app
+ARG ENVIRONMENT
+
+ENV ASPNETCORE_ENVIRONMENT $ENVIRONMENT
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "absolwent.dll"]
