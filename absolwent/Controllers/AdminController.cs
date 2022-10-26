@@ -102,7 +102,7 @@ namespace absolwent.Controllers
             if (key == null)
                 return new Response { Error = true, Message = "Błąd generowania linku", StatusCode = 400 };
 
-            var message = new MailMessage("noreplay@absolwent.best", resetEmail.Email, "Reset hasła", $"Witaj, oto link do resetu hasła: https://dev.absolwent.best/admin/password/reset?token={key}");
+            var message = new MailMessage("noreplay@absolwent.best", resetEmail.Email, "Reset hasła", $"Witaj, oto link do resetu hasła: https://test.absolwent.best/admin/password/reset?token={key}");
             _poolService.SendMail(message);
             return new Response();
         }

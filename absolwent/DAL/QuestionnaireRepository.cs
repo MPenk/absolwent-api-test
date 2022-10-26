@@ -40,7 +40,7 @@ namespace absolwent.DAL
                     Token = BCrypt.Net.BCrypt.HashPassword(graduate.Id.ToString() + date.ToString())
                 };
                 _context.Questionnaire.Add(questionnaire);
-                var message = new MailMessage("noreplay@absolwent.best", graduate.Email, "Nowa ankieta!", $"Witaj, oto link do nowej ankiety: https://dev.absolwent.best/survey?key={questionnaire.Token}");
+                var message = new MailMessage("noreplay@absolwent.best", graduate.Email, "Nowa ankieta!", $"Witaj, oto link do nowej ankiety: https://test.absolwent.best/survey?key={questionnaire.Token}");
                 message.From = new MailAddress("noreplay@absolwent.best", "Ankiety Absolwent.best");
                 _poolService.SendMail(message);
             }
