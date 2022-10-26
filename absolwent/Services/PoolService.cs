@@ -1,4 +1,5 @@
 ﻿using absolwent.Models;
+using Microsoft.Extensions.Options;
 using System.Net;
 using System.Net.Mail;
 
@@ -6,28 +7,23 @@ namespace absolwent.Services
 {
     public class PoolService : IPoolService
     {
+        private AppSettings _appSettings;
 
-        public void StartPool(User user, PoolSettings pool)
+        public PoolService(IOptions<AppSettings> appSettings)
         {
-            var message = new MailMessage("absolwent.best@gmail.com", user.Email, "Nowa ankieta", $"Witaj, Nowe ankiety będą wysyłane co {pool.Frequency} miesiące.");
-            SendMail(message);
+            _appSettings = appSettings.Value;
         }
-        public void StartPool()
-        {
-            var message = new MailMessage("absolwent.best@gmail.com", "michu.penk@gmail.com", "Test", "Wiadomość testowa");
-            SendMail(message);
-        }
-        public static void SendMail(MailMessage Message)
+
+        public void SendMail(MailMessage Message)
         {
             SmtpClient client = new SmtpClient();
-            client.Host = "smtp-relay.sendinblue.com"; // smtp.googlemail.com
+            client.Host = "mail.mpenk.pl";
             client.Port = 587;
             client.DeliveryMethod = SmtpDeliveryMethod.Network;
-            client.EnableSsl = false;
+            client.EnableSsl = true;
             client.Credentials = new NetworkCredential(
-                "absolwent.best@gmail.com",
-                "RngFmUGJqbp4jVtk");
-            //"Az%jWm6Sjy7f3*A6");
+                "noreplay@absolwent.best",
+                _appSettings.MailPassword);
             client.Send(Message);
         }
 

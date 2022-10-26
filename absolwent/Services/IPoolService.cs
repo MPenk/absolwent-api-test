@@ -1,10 +1,10 @@
 ﻿using absolwent.Models;
+using System.Net.Mail;
 
 namespace absolwent.Services
 {
     public interface IPoolService
     {
-        void StartPool();
-        void StartPool(User user, PoolSettings pool);
+        void SendMail(MailMessage Message);
     }
 }

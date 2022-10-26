@@ -21,12 +21,15 @@ namespace absolwent.Controllers
         private readonly IGraduateRepository _graduateRepository;
         private readonly IQuestionnaireRepository _questionnaireRepository;
         private readonly IDataRepository _dataRepository;
-        public AdminController(IUniversityRepository universityRepository, IGraduateRepository graduateRepository, IQuestionnaireRepository questionnaireRepository, IDataRepository dataRepository)
+        private readonly IPoolService _poolService;
+
+        public AdminController(IUniversityRepository universityRepository, IGraduateRepository graduateRepository, IQuestionnaireRepository questionnaireRepository, IDataRepository dataRepository, IPoolService poolService)
         {
             _universityRepository = universityRepository;
             _graduateRepository = graduateRepository;
             _questionnaireRepository = questionnaireRepository;
             _dataRepository = dataRepository;
+            _poolService = poolService;
         }
 
         // POST api/<AdminController>
@@ -100,7 +103,7 @@ namespace absolwent.Controllers
                 return new Response { Error = true, Message = "Błąd generowania linku", StatusCode = 400 };
 
             var message = new MailMessage("absolwent.best@gmail.com", resetEmail.Email, "Reset hasła", $"Witaj, oto link do resetu hasła: https://dev.absolwent.best/admin/password/reset?token={key}");
-            PoolService.SendMail(message);
+            _poolService.SendMail(message);
             return new Response();
         }
 

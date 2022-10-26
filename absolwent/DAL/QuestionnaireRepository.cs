@@ -11,11 +11,13 @@ namespace absolwent.DAL
     {
         private readonly IDbContextFactory<AbsolwentContext> _factory;
         private readonly AbsolwentContext _context;
+        private readonly IPoolService _poolService;
 
-        public QuestionnaireRepository(IDbContextFactory<AbsolwentContext> factory, AbsolwentContext context)
+        public QuestionnaireRepository(IDbContextFactory<AbsolwentContext> factory, AbsolwentContext context, IPoolService poolService)
         {
             _factory = factory;
             _context = context;
+            _poolService = poolService;
 
         }
 
@@ -38,9 +40,9 @@ namespace absolwent.DAL
                     Token = BCrypt.Net.BCrypt.HashPassword(graduate.Id.ToString() + date.ToString())
                 };
                 _context.Questionnaire.Add(questionnaire);
-                var message = new MailMessage("absolwent.best@gmail.com", graduate.Email, "Nowa ankieta!", $"Witaj, oto link do nowej ankiety: https://dev.absolwent.best/survey?key={questionnaire.Token}");
-                message.From = new MailAddress("absolwent.best@gmail.com", "Ankiety Absolwent.best");
-                PoolService.SendMail(message);
+                var message = new MailMessage("noreplay@absolwent.best", graduate.Email, "Nowa ankieta!", $"Witaj, oto link do nowej ankiety: https://dev.absolwent.best/survey?key={questionnaire.Token}");
+                message.From = new MailAddress("noreplay@absolwent.best", "Ankiety Absolwent.best");
+                _poolService.SendMail(message);
             }
             _context.SaveChanges();
         }
