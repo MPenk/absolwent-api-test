@@ -1,1 +1,1 @@
-# absolwent-api-test
+# Api dla aplikacji Absolwent
