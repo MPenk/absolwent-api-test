@@ -3,7 +3,8 @@
     public class PoolSettings
     {
 
-        public int Frequency { get; set; }
+        public int Valid_days { get; set; }
+        public string Group_name { get; set; }
 
     }
 }

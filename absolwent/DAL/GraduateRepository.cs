@@ -27,7 +27,7 @@ namespace absolwent.DAL
         }
         public Graduate? GetGraduate(long id)
         {
-            var users = _context.Graduate.Where(user => user.Id == id);
+            var users = _context.Graduate.Where(user => user.Graduate_id == id);
             if (!users.Any())
                 return null;
             return users.First();
@@ -42,7 +42,7 @@ namespace absolwent.DAL
 
         public void DeleteGraduate(int id)
         {
-            var graduate = _context.Graduate.Where(graduate => graduate.Id == id);
+            var graduate = _context.Graduate.Where(graduate => graduate.Graduate_id == id);
             if (!graduate.Any())
                 throw new Exception("Taki użytkownik nie istnieje");
             _context.Graduate.Remove(graduate.First());

@@ -2,6 +2,6 @@
 {
     public class GraduateRemove
     {
-        public int Id { get; set; }
+        public int GraduateId { get; set; }
     }
 }

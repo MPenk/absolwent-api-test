@@ -22,11 +22,11 @@ namespace absolwent.DAL
         }
 
 
-        public void CreateForYear(int year)
+        public void CreateForYear()
         {
 
             var _context = (AbsolwentContext)_factory.CreateDbContext();
-            var graduates = _context.Graduate.Where(user => user.GraduationYear == year);
+            var graduates = _context.Graduate;
 
             foreach (var graduate in graduates)
             {
@@ -37,7 +37,7 @@ namespace absolwent.DAL
                     Graduate = graduate,
                     Filled = false,
                     SendingData = date,
-                    Token = BCrypt.Net.BCrypt.HashPassword(graduate.Id.ToString() + date.ToString())
+                    Token = BCrypt.Net.BCrypt.HashPassword(graduate.Graduate_id.ToString() + date.ToString())
                 };
                 _context.Questionnaire.Add(questionnaire);
                 var message = new MailMessage("noreplay@absolwent.best", graduate.Email, "Nowa ankieta!", $"Witaj, oto link do nowej ankiety: https://test.absolwent.best/survey?key={questionnaire.Token}");

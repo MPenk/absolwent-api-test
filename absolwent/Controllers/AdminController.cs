@@ -36,7 +36,7 @@ namespace absolwent.Controllers
         /// <summary>
         /// Wysyłanie ankiet
         /// </summary>
-        /// <param name="frequency">Częstotliwość (podana w miesiącach)</param>
+        /// <param name="Valid_days">Czas ważności ankiety (podany w dniach)</param>
         /// <returns></returns>
         [Authorize]
         [HttpPost("survey")]
@@ -45,7 +45,16 @@ namespace absolwent.Controllers
         public IActionResult SendSurvey([FromBody] PoolSettings pool)
         {
             University user = (University)this.HttpContext.Items["User"];
-            _universityRepository.ChangeFrequency(user.Id, pool.Frequency);
+            _universityRepository.ChangeFrequency(user.Id, pool.Valid_days);
+            new Task(() => { _questionnaireRepository.CreateForYear(); }).Start();
+            //try
+            //{
+            //    _poolService.StartPool(user, pool);
+            //}
+            //catch (Exception ex)
+            //{
+            //    return BadRequest(new Response() { Error = true, Message = ex.Message, StatusCode = 500 });
+            //}
             //try
             //{
             //    _poolService.StartPool(user, pool);
@@ -173,30 +182,6 @@ namespace absolwent.Controllers
 
         // POST api/<AdminController>
         /// <summary>
-        /// Wysyłanie ankiet teraz
-        /// </summary>
-        /// <returns></returns>
-        [Authorize]
-        [HttpPost("survey/send")]
-        [SwaggerResponse(200, "Success", typeof(Response))]
-        [SwaggerResponse(401, "Unauthorized", typeof(Response))]
-        public IActionResult SendSurveyNow([FromBody] SurveySendNowRequest value)
-        {
-            new Task(() => { _questionnaireRepository.CreateForYear(value.Year); }).Start();
-            //try
-            //{
-            //    _poolService.StartPool(user, pool);
-            //}
-            //catch (Exception ex)
-            //{
-            //    return BadRequest(new Response() { Error = true, Message = ex.Message, StatusCode = 500 });
-            //}
-            return Ok(new Response());
-        }
-
-
-        // POST api/<AdminController>
-        /// <summary>
         /// Lista absolwentów
         /// </summary>
         /// <returns></returns>
@@ -216,14 +201,14 @@ namespace absolwent.Controllers
         /// </summary>
         /// <returns></returns>
         [Authorize]
-        [HttpPost("graduate/delete")]
+        [HttpDelete("graduate/delete")]
         [SwaggerResponse(200, "Success", typeof(Response))]
         [SwaggerResponse(401, "Unauthorized", typeof(Response))]
         public IActionResult GraduateRemove([FromBody] GraduateRemove data)
         {
             try
             {
-                _graduateRepository.DeleteGraduate(data.Id);
+                _graduateRepository.DeleteGraduate(data.GraduateId);
             }
             catch (Exception ex)
             {
